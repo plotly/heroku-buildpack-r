@@ -237,6 +237,8 @@ sed -i "s#root:x:0:0:root:/root:/bin/bash#root:x:0:0:root:/app:/bin/bash#g" etc/
 
 fakechroot fakeroot chroot $CHROOT_DIR \
   /bin/sh -c 'cd /usr/lib && ln -sf ../lib/R/lib/libR.so libR.so'
+fakechroot fakeroot chroot $CHROOT_DIR \
+  /bin/sh -c 'cd /usr/lib && ln -sf ../lib/R/lib/x86_64-linux-gnu/libblas.so.3 libblas.so.3'
 
 #
 ###
