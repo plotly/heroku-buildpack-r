@@ -188,8 +188,6 @@ topic "Vendoring R $R_VERSION for $STACK stack ($BUILD_PACK_VERSION)"
 
 pushd $BUILD_DIR > /dev/null
 
-echo "Minus 1"
-pwd
 # check cache
 CACHE_KEY="$STACK-$R_VERSION-$BUILD_PACK_VERSION.tar.gz"
 if [[ -f "$CACHE_DIR/$CACHE_KEY" ]]; then
@@ -223,10 +221,6 @@ pushd $CHROOT_DIR > /dev/null
 rm -rf app # for sanity
 ln -sf $BUILD_DIR app
 
-echo "Zero"
-ls -la /tmp/build/.root/usr/lib/R/etc
-pwd
-
 # make /app the home directory since application
 # authors will expect the same behaviour within the chroot
 # as the heroku instance. I.e. /app exists and contains their code etc.
@@ -246,6 +240,8 @@ fakechroot fakeroot chroot $CHROOT_DIR \
   /bin/sh -c 'cd /usr/lib && ln -sf ../lib/R/lib/libR.so libR.so'
 fakechroot fakeroot chroot $CHROOT_DIR \
   /bin/sh -c 'cd /usr/lib && ln -sf ../lib/x86_64-linux-gnu/blas/libblas.so.3.7.1 libblas.so.3'
+fakechroot fakeroot chroot $CHROOT_DIR \
+  /bin/sh -c 'cd /usr/lib/R/etc && rm -f Renviron && ln -sf ../../../../etc/R/Renviron Renviron'
 
 #
 ###
