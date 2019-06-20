@@ -188,6 +188,9 @@ topic "Vendoring R $R_VERSION for $STACK stack ($BUILD_PACK_VERSION)"
 
 pushd $BUILD_DIR > /dev/null
 
+echo "Minus 1"
+ls -la /tmp/build/.root/usr/lib/R/etc
+pwd
 # check cache
 CACHE_KEY="$STACK-$R_VERSION-$BUILD_PACK_VERSION.tar.gz"
 if [[ -f "$CACHE_DIR/$CACHE_KEY" ]]; then
@@ -211,6 +214,7 @@ fi
 
 popd > /dev/null
 
+
 # set to build dir, so packages can be installed
 patch_chroot "/app" "$BUILD_DIR"
 
@@ -219,6 +223,10 @@ pushd $CHROOT_DIR > /dev/null
 # link app dir into chroot
 rm -rf app # for sanity
 ln -sf $BUILD_DIR app
+
+echo "Zero"
+ls -la /tmp/build/.root/usr/lib/R/etc
+pwd
 
 # make /app the home directory since application
 # authors will expect the same behaviour within the chroot
