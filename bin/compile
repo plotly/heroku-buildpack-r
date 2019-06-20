@@ -180,8 +180,8 @@ BUILD_PACK_VERSION=${BUILD_PACK_VERSION:-latest}
 
 # build up path to binaries on S3
 R_BINARIES_FILE="R-${R_VERSION}-binaries-${BUILD_PACK_VERSION}.tar.gz"
-#R_BINARIES="https://${S3_BUCKET}.s3.amazonaws.com/${STACK}/$R_BINARIES_FILE"
-R_BINARIES="https://storage.googleapis.com/dashr/$R_BINARIES_FILE"
+R_BINARIES="https://${S3_BUCKET}.s3.amazonaws.com/${STACK}/$R_BINARIES_FILE"
+#R_BINARIES="https://storage.googleapis.com/dashr/$R_BINARIES_FILE"
 
 # vendor R into the slug
 topic "Vendoring R $R_VERSION for $STACK stack ($BUILD_PACK_VERSION)"
@@ -238,7 +238,7 @@ sed -i "s#root:x:0:0:root:/root:/bin/bash#root:x:0:0:root:/app:/bin/bash#g" etc/
 fakechroot fakeroot chroot $CHROOT_DIR \
   /bin/sh -c 'cd /usr/lib && ln -sf ../lib/R/lib/libR.so libR.so'
 fakechroot fakeroot chroot $CHROOT_DIR \
-  /bin/sh -c 'cd /usr/lib && ln -sf ../lib/R/lib/x86_64-linux-gnu/libblas.so.3 libblas.so.3'
+  /bin/sh -c 'cd /usr/lib && ln -sf ../lib/R/lib/x86_64-linux-gnu/blas/libblas.so.3.7.1 libblas.so.3'
 
 #
 ###
