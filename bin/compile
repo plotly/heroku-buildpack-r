@@ -275,6 +275,9 @@ fi
 # write normalizePath hack to Rprofile.site
 cp "$BUILDPACK_DIR/bin/Rprofile.site" "$CHROOT_DIR/etc/R/Rprofile.site"
 
+echo "First!"
+ls -la /tmp/build/.root/usr/lib/R/etc
+
 # install application author dependencies from CRAN
 topic "Executing R init script"
 
@@ -299,6 +302,9 @@ if [[ ! -z "$INIT_FILE" ]]; then
   #  would have preferred to use sed or awk for this, but it's real tricky with multi-line
   #  replacements, so using a Ruby program, as Ruby is installed on Heroku by default
   ruby "$BUILDPACK_DIR/bin/util.rb" "$WRAPPER" "$INIT_FILE" "$BUILD_DIR" "$CRAN_MIRROR"
+
+  echo "Second!"
+  ls -la /tmp/build/.root/usr/lib/R/etc
 
   # execute the init wrapper
   # working directory must be /app so that provided packages/scripts can be found
