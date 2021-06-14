@@ -1,0 +1,42 @@
+#!/usr/bin/env bash
+
+set -euo pipefail
+
+echo "---> R Buildpack"
+
+# 1. GET ARGS
+layersdir=$1
+env_dir="$2/env"
+plan_path="$3"
+
+# 2. CREATE THE LAYER DIRECTORY
+rlayer="$layersdir"/r
+mkdir -p "$rlayer"
+
+# 3. DOWNLOAD R
+echo "---> Downloading and extracting R"
+
+R_BINARIES_FILE="R-4.0.5-binaries-latest.tar.gz"
+r_url="https://storage.googleapis.com/dashr/$R_BINARIES_FILE"
+curl -sSL "$r_url" | tar -xzf - -C "$rlayer"
+
+# 4. MAKE RUBY AVAILABLE DURING LAUNCH
+echo -e 'launch = true' > "$layersdir/r.toml"
+
+# 5. MAKE R AVAILABLE TO THIS SCRIPT
+export PATH="$rlayer"/bin:$PATH
+export LD_LIBRARY_PATH=${LD_LIBRARY_PATH:+${LD_LIBRARY_PATH}:}"$rlayer/lib/R/lib"
+
+# 6. INSTALL DEPENDENCIES
+echo "---> Installing dependencies"
+R --no-save --file=init.R
+
+# 7. SET DEFAULT START COMMAND
+cat > "$layersdir/launch.toml" <<EOL
+# our web process
+[[processes]]
+type = "web"
+command = "R -f app.R"
+EOL
+
+exit 0
